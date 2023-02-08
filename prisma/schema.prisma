@@ -13,26 +13,27 @@ datasource db {
 model User {
   id         Int     @id @default(autoincrement())
   email      String  @unique
-  name       String?
-  password String
+  name       String  @unique
+  password   String
   posts      Post[]
   likedPosts Likes[]
 }
 
 model Likes {
-  id     Int   @id @default(autoincrement())
-  User   User? @relation(fields: [authorId], references: [id])
-  authorId Int?
-  Post   Post? @relation(fields: [postId], references: [id])
-  postId Int?
-  liked Boolean @default(false)
+  id         Int     @id @default(autoincrement())
+  User       User?   @relation(fields: [authorName], references: [name])
+  authorName String?
+  Post       Post?   @relation(fields: [postId], references: [id])
+  postId     Int?    @unique
+  liked      Boolean @default(false)
 }
 
 model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
-  likeCount Likes[]
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String?
+  author     User     @relation(fields: [authorId], references: [id])
+  authorId   Int
+  likedBy    Likes[]
+  created_at DateTime? @default(now())
 }

@@ -1,4 +1,4 @@
 export class QueryParamsLikeDto {
-  authorId?: number
+  authorName?: string
   postId?: number
 }

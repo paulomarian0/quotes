@@ -12,7 +12,6 @@ export class LikesService {
 
     const payload = await this.prisma.likes.create({
       data,
-   
     })
 
     return payload;
@@ -32,12 +31,12 @@ export class LikesService {
   }
 
   async remove(params: QueryParamsLikeDto) {
-    const authorId = +params.authorId
+    const authorName = params.authorName
     const postId = +params.postId
 
     const payload = await this.prisma.likes.deleteMany({
       where: {
-        authorId,
+        authorName,
         postId
       }
     })

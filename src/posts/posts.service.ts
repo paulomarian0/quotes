@@ -27,8 +27,12 @@ export class PostsService {
       where: params,
       include: {
         author: true,
-        likeCount: true
+        _count: true,
+        likedBy: true
       },
+      orderBy: {
+        created_at: 'desc'
+      }
     })
 
     return payload;
