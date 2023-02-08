@@ -1,21 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreatePostDto } from './dto/create-post.dto';
+import { QueryParamsPostDto } from './dto/query-params-posts.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostsService {
 
-  constructor (private prisma:PrismaService){}
+  constructor(private prisma: PrismaService) { }
 
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+  async create(data: CreatePostDto) {
+
+    const payload = await this.prisma.post.create({
+      data,
+    })
+
+    return payload;
   }
 
-  async findAll() {
+  async findAll(params: QueryParamsPostDto) {
+
+    if (params.id)
+      params.id = +params.id
 
     const payload = await this.prisma.post.findMany({
-      include:{
+      where: params,
+      include: {
         author: true,
         likeCount: true
       }
@@ -24,15 +34,31 @@ export class PostsService {
     return payload;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async update(params: QueryParamsPostDto, data: UpdatePostDto) {
+
+    const id = +params.id
+
+    const payload = await this.prisma.post.update({
+      data,
+      where: { id }
+    })
+
+    return payload;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
-  }
+  async remove(params: QueryParamsPostDto) {
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+    const id = +params.id
+
+    const removeAllLikesFromThisPost = await this.prisma.likes.deleteMany({
+      where: {postId: id}
+    })
+
+    const payload = await this.prisma.post.delete({
+      where: { id }
+    
+    })
+
+    return payload;
   }
 }
