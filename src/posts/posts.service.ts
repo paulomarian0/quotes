@@ -28,7 +28,7 @@ export class PostsService {
       include: {
         author: true,
         likeCount: true
-      }
+      },
     })
 
     return payload;
@@ -51,12 +51,12 @@ export class PostsService {
     const id = +params.id
 
     const removeAllLikesFromThisPost = await this.prisma.likes.deleteMany({
-      where: {postId: id}
+      where: { postId: id }
     })
 
     const payload = await this.prisma.post.delete({
       where: { id }
-    
+
     })
 
     return payload;

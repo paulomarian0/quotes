@@ -12,6 +12,11 @@ export class LikesController {
     return this.likesService.create(createLikeDto);
   }
 
+  @Get()
+  findAll(){
+    return this.likesService.findAll();
+  }
+
   @Delete()
   remove(@Query() params: QueryParamsLikeDto) {
     return this.likesService.remove(params);

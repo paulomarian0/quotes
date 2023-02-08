@@ -1,3 +1,4 @@
-export class QueryParamsLikeDto{
-id?: number
+export class QueryParamsLikeDto {
+  authorId?: number
+  postId?: number
 }

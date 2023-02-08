@@ -12,7 +12,17 @@ export class LikesService {
 
     const payload = await this.prisma.likes.create({
       data,
-      include: {
+   
+    })
+
+    return payload;
+  }
+
+  async findAll() {
+    const payload = await this.prisma.likes.findMany({
+      select: {
+        id: true,
+        liked: true,
         User: true,
         Post: true
       }
@@ -22,11 +32,14 @@ export class LikesService {
   }
 
   async remove(params: QueryParamsLikeDto) {
+    const authorId = +params.authorId
+    const postId = +params.postId
 
-    const id = params.id
-
-    const payload = await this.prisma.likes.delete({
-      where: { id }
+    const payload = await this.prisma.likes.deleteMany({
+      where: {
+        authorId,
+        postId
+      }
     })
 
     return payload;
