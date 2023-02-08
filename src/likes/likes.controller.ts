@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { LikesService } from './likes.service';
 import { CreateLikeDto } from './dto/create-like.dto';
-import { UpdateLikeDto } from './dto/update-like.dto';
+import { QueryParamsLikeDto } from './dto/query-params-likes.dto';
 
 @Controller('likes')
 export class LikesController {
@@ -12,23 +12,8 @@ export class LikesController {
     return this.likesService.create(createLikeDto);
   }
 
-  @Get()
-  findAll() {
-    return this.likesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.likesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLikeDto: UpdateLikeDto) {
-    return this.likesService.update(+id, updateLikeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.likesService.remove(+id);
+  @Delete()
+  remove(@Query() params: QueryParamsLikeDto) {
+    return this.likesService.remove(params);
   }
 }

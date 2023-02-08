@@ -1,38 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateLikeDto } from './dto/create-like.dto';
-import { UpdateLikeDto } from './dto/update-like.dto';
+import { QueryParamsLikeDto } from './dto/query-params-likes.dto';
 
 @Injectable()
 export class LikesService {
 
   constructor(private prisma: PrismaService) { }
 
-  async create(createLikeDto: CreateLikeDto) {
-    return 'This action adds a new like';
-  }
+  async create(data: CreateLikeDto) {
 
-  async findAll() {
-
-    const payload = await this.prisma.likes.findMany({
-      include:{
-        Post: true,
-        User: true
+    const payload = await this.prisma.likes.create({
+      data,
+      include: {
+        User: true,
+        Post: true
       }
     })
 
     return payload;
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} like`;
-  }
+  async remove(params: QueryParamsLikeDto) {
 
-  async update(id: number, updateLikeDto: UpdateLikeDto) {
-    return `This action updates a #${id} like`;
-  }
+    const id = params.id
 
-  async remove(id: number) {
-    return `This action removes a #${id} like`;
+    const payload = await this.prisma.likes.delete({
+      where: { id }
+    })
+
+    return payload;
   }
 }
