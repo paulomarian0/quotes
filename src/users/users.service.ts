@@ -12,7 +12,6 @@ export class UsersService {
   async create(data: CreateUserDto) {
     const payload = await this.prisma.user.create({
       data,
-
     })
 
     return payload;
@@ -37,7 +36,7 @@ export class UsersService {
   async update(params: QueryParamsUserDto, data: UpdateUserDto) {
     const id = +params.id
 
-    const payload = this.prisma.user.update({
+    const payload = await this.prisma.user.update({
       data,
       where: { id }
     })
@@ -48,8 +47,12 @@ export class UsersService {
   async remove(params: QueryParamsUserDto) {
     const id = +params.id
 
-    const payload = this.prisma.user.delete({
-      where: { id }
+    const deleteAllPostsFromThisUser = await this.prisma.post.deleteMany({
+      where: { authorId: id }
+    })
+
+    const payload = await this.prisma.user.delete({
+      where: { id },
     })
 
     return payload;
