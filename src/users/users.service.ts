@@ -11,7 +11,8 @@ export class UsersService {
 
   async create(data: CreateUserDto) {
     const payload = await this.prisma.user.create({
-      data
+      data,
+
     })
 
     return payload;
@@ -23,7 +24,11 @@ export class UsersService {
       params.id = +params.id
 
     const payload = await this.prisma.user.findMany({
-      where: params
+      where: params,
+      include: {
+        posts: true,
+        likedPosts: true
+      }
     })
 
     return payload;

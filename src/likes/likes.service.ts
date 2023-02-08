@@ -14,7 +14,12 @@ export class LikesService {
 
   async findAll() {
 
-    const payload = 3
+    const payload = await this.prisma.likes.findMany({
+      include:{
+        Post: true,
+        User: true
+      }
+    })
 
     return payload;
   }
